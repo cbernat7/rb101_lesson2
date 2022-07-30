@@ -32,5 +32,34 @@ else
 end
 
 this outputs 'valid number' bc any integer is truthy 
-integer devision - outputs whole integer
+integer division - outputs whole integer
 convert to float to get decimals
+
+---------
+Pseudo code first!
+two layers:
+1. logical problem
+2. Syntactical programming language
+--------
+Pseudocode language
+START start of program
+SET   sets a variable we can use for later
+GET   retrieve input from user
+PRINT  displays output to user
+READ    retrieve value from variable
+IF/     show conditional branches in logic
+ELSE IF/
+ELSE
+WHILE   show looping logic
+END     end of program
+
+-------------------------
+START
+#method that returns the sum of two integers
+
+SET integer 1
+SET integer 2
+SET sum = integer 1 + integer 2
+PRINT sum 
+END
+
