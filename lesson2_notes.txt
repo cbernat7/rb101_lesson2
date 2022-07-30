@@ -1,0 +1,36 @@
+boolean
+true.class #=>TrueClass
+true.nil? #=>false
+
+#this always will output 'hi'
+it true
+  puts 'hi'
+else
+  puts 'goodbye'
+end
+
+
+#this will always output 'goodbye'
+if false
+  puts 'hi'
+else
+  puts 'goodbye'
+end
+
+-------------
+TRUTHINESS
+
+everything is truthy other than false and nil
+an expression that ruby considers ture does NOT equal true object
+even integer 0 is truthy 
+
+num = 5
+if num 
+  puts "valid number"
+else
+  puts "error"
+end
+
+this outputs 'valid number' bc any integer is truthy 
+integer devision - outputs whole integer
+convert to float to get decimals
