@@ -63,3 +63,105 @@ SET sum = integer 1 + integer 2
 PRINT sum 
 END
 
+---------------
+Debugging techniques
+-line by line
+-rubber duck
+-walking away 
+-using pry
+  => gem install pry
+  at top of doc:
+    require "pry"
+  at point you want to inspect, add:
+    binding.pry
+  continue through loop:
+    ctrl + D
+  exit pry:
+    exit-program
+-using a debugger - can also use pry
+
+
+---------------------------------
+
+Precedence:
+order of operations! aka operator precedence
+
+an operator that has higher precedence - it BINDS more tightly to its operands
+* binds more tightly than + 
+
+precedence, L-to-R, R-to-L, short-circuiting, ternary expressions
+
+
+def value(n)
+  puts n
+  n
+end
+
+puts value(3) + value(5) * value(7)
+
+  ruby evaluates everything it can without calling any operators
+  in above case, evaluates value(3),value(5),value(7) FIRST and then does order of operations
+
+RIGHT TO LEFT
+  a = b = c = 3
+  puts a if a == b if a == c
+
+
+TERNARY  :?
+
+SHORT CIRCUIT && ||
+
+----------------------------
+array = [1, 2, 3]
+
+array.map { |num| num + 1 }     # => [2, 3, 4]
+p array.map { |num| num + 1 }      #  outputs [2, 3, 4]
+                                   #  => [2, 3, 4]
+
+array.map do |num|
+  num + 1
+end                                 #   => [2, 3, 4]
+
+p array.map do |num|
+  num + 1                   #  outputs #<Enumerator: [1, 2, 3]:map>
+end                           #  => #<Enumerator: [1, 2, 3]:map>
+
+
+BLOCKS have the lowest precedence of all operators. 
+{} has slightly higher precedence than do...end 
+this affects which method call the block gets passed to
+since do...end is the weakest, array.map gets bound to p 
+which first invokes array.map, returning Enumerator object
+then Enumerator object is passed to p, along with the block 
+p prints the Enumerator but doesn't do anything with the block
+
+same code, can be visualized with the parenthesis below:
+array = [1, 2, 3]
+
+p(array.map) do |num|
+  num + 1                           #  <Enumerator: [1, 2, 3]:map>
+end                                 #  => <Enumerator: [1, 2, 3]:map>
+
+p(array.map { |num| num + 1 })      # [2, 3, 4]
+                                    # => [2, 3, 4]
+
+---------------------------------------------------------
+TAP - Object instance method tap. useful debugging tool
+
+mapped_array = array.map { |num| num + 1 }
+
+mapped_array.tap { |value| p value }              # => [2, 3, 4]
+
+
+mapped_and_tapped = mapped_array.tap { |value| p 'hello' }   # ‘hello’
+
+mapped_and_tapped                                            # => [2, 3, 4]
+
+can use to debug intermediate objects in method chains
+(1..10)                 .tap { |x| p x }   # 1..10
+ .to_a                  .tap { |x| p x }   # [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+ .select {|x| x.even? } .tap { |x| p x }   # [2, 4, 6, 8, 10]
+ .map {|x| x*x }        .tap { |x| p x }   # [4, 16, 36, 64, 100]
+
+
+ USE PARENTHESES - makes it clear what has precendence and fewer mistakes.
