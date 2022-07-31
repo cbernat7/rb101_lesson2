@@ -1,0 +1,95 @@
+local variables:
+method definition and method invocation with a block
+methods- self contained scope
+blocks - inner scope can access variables initalized in an outer scope but not vice versa
+
+BLOCKS
+do |num|
+  puts num
+end
+
+or 
+
+{ |num| puts num}
+
+blocks create new scope for local variables  aka inner scope
+nested blocked will create nested scopes 
+scope is determined by where it is initialized
+
+a = 1         # outer scope variable
+
+loop do       # the block following the invocation of the `loop` method creates an inner scope
+  puts a      # => 1
+  a = a + 1   # "a" is re-assigned to a new value
+  break       # necessary to prevent infinite loop
+end
+
+puts a        # => 2  "a" was re-assigned in the inner scope
+
+^demonstrates that inner scope can access outer scope variables
+-you can change variables from an inner scope and have that change affect the outer scope
+-when instantiate variables in inner scope, careful to no re-assign existing out scope variable
+
+loop do       # the block following the invocation of the `loop` method creates an inner scope
+  b = 1
+  break
+end
+
+puts b        # => NameError: undefined local variable or method `b' for main:Object
+
+main is the outer scope and b is not found in the main scope.
+
+peer blocks cannot reference variables initialized inother blocks.
+---------------
+
+NESTED BLOCKS - most inner level can access all outer ones, but outer cant accessed inner 
+
+----------------------
+VARIABLE SHADOWING
+
+[1, 2, 3].each do |n|
+  puts n
+end
+
+block parameter is n. if we had variable named n in the outer scope? 
+that is variable shadowing and it prevents access to the outer scope local variable.
+ex:
+n = 10
+[1, 2, 3].each do |n|
+  puts n
+end
+
+^puts n will use the block parameter n and disregard the outer scoped n. 
+variable shadowing also prevents us from making changes to the outer scope
+-----------------------------------
+METHODS - 
+cannot access variables initialized outsdie of the methods
+scope is self-contained
+-----------------
+
+BLOCKS within method definitions
+same rules
+
+------------
+CONSTANTS
+behave like globals
+
+USERNAME = 'bagman'
+def authenticate
+  puts "logging in #{USERNAME}"
+end
+
+authenticate => logging in bagman
+
+^normal local variables cant be accessed via methods like that 
+
+loop do
+  MY_TEAM = "dogs"
+  break
+end
+
+puts MY_TEAM #=> dogs
+
+^very different from local variables
+constants have LEXICAL SCOPE - different scoping rules form local variables
+

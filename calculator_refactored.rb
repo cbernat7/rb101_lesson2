@@ -3,90 +3,97 @@
 # asks for type of operation(add,subtract,multipy, or divide)
 # displays result
 
+require 'yaml'
+MESSAGES = YAML.load_file('calculator_messages.yml')
+
 # ask the user for two numbers
 def prompt(message)
   puts "=> #{message}"
 end
 
 def valid_number?(num)
-  num.to_i != 0
+  num.to_i.to_s == num
+end
+
+#validates if the input is a float or integer
+def number?(input)
+  integer?(input) || float?(input)
+end
+
+#validates if input is float
+def float?(input)
+  /\d/.match(input) && /^-?\d*\.?d*$\.match(input)
 end
 
 # bc case statement is last in the method- will automatically return value
 def operation_to_message(oper)
-  case oper
-  when '1'
-    'Adding'
-  when '2'
-    'Subtracting'
-  when '3'
-    'Multiplying'
-  when '5'
-    'Dividing'
-  end
+ word = case oper
+        when '1'
+          'Adding'
+        when '2'
+          'Subtracting'
+        when '3'
+          'Multiplying'
+        when '5'
+          'Dividing'
+        end
+  word
 end
 
-prompt 'welcome to the calculator! Enter your name:'
+prompt(MESSAGES['welcome'])
 name = ''
 loop do
   name = gets.chomp
   if name.empty?
-    prompt 'please enter a name!'
+    prompt(MESSAGES['valid_name'])
   else
     break
   end
 end
 
-prompt "Hi #{name}"
+prompt(MESSAGES['greeting'])
 
 # main loop
 loop do
   number1 = ''
   # loop to check if valid number
   loop do # need to move number1 variable outside of looop do block
-    prompt "what's the first number?"
+    prompt(MESSAGES['first_num'])
     number1 = gets.chomp.to_i
     if valid_number? number1
       break
     else
-      prompt 'Error..please enter a valid number'
+      prompt(MESSAGES['invalid_num_error'])
     end
   end
 
   # ask for number2 and check for valid number
-  prompt "what's the second number?"
+  prompt(MESSAGES['second_num'])
   number2 = ''
   loop do
-    prompt "what's the first number?"
     number2 = gets.chomp.to_i
     if valid_number?(number2)
       break
     else
-      prompt 'Error..please enter a valid number'
+      prompt(MESSAGES['invalid_num_error'])
     end
   end
 
   # ask the user for an operation to perform
-  operator_prompt = <<-MSG
-  what operation do you want to do? 
-    1(Add)
-    2(subtract)
-    3(multipy)
-    4(divide)
-  MSG
 
-  prompt operator_prompt
+
+  prompt(MESSAGES['operator_prompt']) 
   operator = ''
   loop do
     operator = gets.chomp
     if %w[1 2 3 4].include?(operator)
       break
     else
-      prompt 'must enter 1,2,3 or 4'
+      prompt(MESSAGES['invalid_operator_error'])
     end
   end
 
-  prompt "#{operation_to_message(operator)} the two numbers.. "
+  prompt(MESSAGES['operation_notification'])
   # perform the operation on the two numbers
 
   result =  case operator
@@ -101,11 +108,11 @@ loop do
             end
 
   # output the result
-  prompt "the result is #{result}"
+  prompt(MESSAGES['result'])
 
-  prompt 'do you want to perform another calculation (Y to calculate again)'
+  prompt(MESSAGES['another_calculation_question'])
   answer = gets.chomp
   break unless answer.downcase.start_with?('y')
 end
 
-prompt 'thank you for using the calcuator. Good bye!'
+prompt(MESSAGES['thank_you'])
